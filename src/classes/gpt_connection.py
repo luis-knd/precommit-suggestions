@@ -1,6 +1,11 @@
-import openai
+import logging
 import os
+import time
+
+import openai
 from dotenv import load_dotenv
+
+from src.gpt_constants import Gpt
 load_dotenv()
 
 
@@ -25,9 +30,14 @@ class GPTConnection:
             response_format = (f"Give me the answers in formal language, I don't care with the size about the "
                                f"response. However, this should be clear and included in the step by step, "
                                f"with clean and scalable code examples using the best practices and standards, "
-                               f"and having a critical opinion. Is a plus translate to Spanish")
+                               f"OWASP rules and having a critical opinion. Translate to Spanish")
+            logging.info("preparando la consulta a GPT en busca de errores logicos y problemas de performance")
+            start_time = time.time()
+            # TODO comment this for not use all my Free request
+            # response = "PRUEBA de una respuesta de ChatGpt "
+            # suggestions_messages = response
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model=Gpt.MODEL_GPT_3_5_TURBO.value,
                 messages=[
                     {"role": "system", "content": "You are a proficient PHP, Java, Flutter, Python, C# and JavaScript "
                                                   "developer, interested to do a better developer implemented clean "
@@ -37,8 +47,11 @@ class GPTConnection:
                 max_tokens=500,
                 temperature=0
             )
+            end_time = time.time()
             suggestions_messages = response["choices"][0]["message"]["content"]
             paragraphs = suggestions_messages.split("\n\n")
+            logging.info(f"we already have a suggestion from GPT, the same delay: {end_time - start_time:.2f} seconds.")
             return paragraphs
         except Exception as e:
-            return str(e)
+            logging.error(f"an error occurred: {e}")
+            return str(f"an error occurred: {e}")
