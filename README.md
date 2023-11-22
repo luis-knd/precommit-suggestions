@@ -26,6 +26,6 @@ output_file="$output_dir/$extracted_part.txt"
 # Create the output directory if it doesn't exist
 mkdir -p "$output_dir"
 
-git diff --diff-filter=A --unified=0 $branch_name -- '*.php' '*.js' '*.py' >> "$output_file"
+git diff --diff-filter=AM --unified=0 $branch_name -- '*.php' '*.js' '*.py' >> "$output_file"
 ```
 

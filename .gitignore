@@ -163,3 +163,4 @@ cython_debug/
 # Applications File
 /src/data/cr_suggestions/*.txt
 /src/data/input/*.txt
+/src/data/input/*
